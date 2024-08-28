@@ -1,0 +1,28 @@
+CC := gcc.exe
+
+SRC_DIR := src
+INC_DIR := include
+OBJ_DIR := obj
+LIB_DIR := lib
+
+SRC := $(wildcard $(SRC_DIR)/*.c)
+INC := -I$(INC_DIR)
+OBJ := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+
+TARGET := name.exe
+
+all: $(TARGET)
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(TARGET): $(OBJ)
+	$(CC) -o $@ $<
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(OBJ_DIR)
+	$(CC) -c $(INC) -o $@ $<
+
+clean:
+	rm -rf $(OBJ_DIR)/*.o $(TARGET)
+
+.PHONY: all clean
