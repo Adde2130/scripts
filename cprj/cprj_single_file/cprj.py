@@ -34,7 +34,11 @@ SRC := $(wildcard $(SRC_DIR)/*.c)
 INC := -I$(INC_DIR)
 OBJ := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
+LDFLAGS := -L$(LIB_DIR) $(patsubst $(LIB_DIR)/lib%.a, -l%, $(wildcard $(LIB_DIR)/lib*.a))
+
 TARGET := name.exe
+
+CFLAGS := -Wall -Wextra 
 
 all: $(TARGET)
 
@@ -42,10 +46,10 @@ $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 $(TARGET): $(OBJ)
-	$(CC) -o $@ $<
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(OBJ_DIR)
-	$(CC) -c $(INC) -o $@ $<
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 clean:
 	rm -rf $(OBJ_DIR)/*.o $(TARGET)
